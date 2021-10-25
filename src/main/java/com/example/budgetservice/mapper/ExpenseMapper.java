@@ -8,4 +8,5 @@ import java.util.List;
 @Mapper
 public interface ExpenseMapper {
     List<ExpenseDto> findByUserId(long userId);
+    Long delete(long expenseId);
 }

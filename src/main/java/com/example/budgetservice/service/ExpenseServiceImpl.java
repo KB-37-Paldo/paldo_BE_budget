@@ -24,4 +24,9 @@ public class ExpenseServiceImpl implements ExpenseService{
                 .map(ExpenseDto::getExpenseResponse)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public Long deleteExpense(long expenseId) {
+        return sqlSession.getMapper(ExpenseMapper.class).delete(expenseId);
+    }
 }
