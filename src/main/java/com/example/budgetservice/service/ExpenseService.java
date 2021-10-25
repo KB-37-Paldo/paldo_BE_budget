@@ -7,4 +7,5 @@ import java.util.List;
 public interface ExpenseService {
 
     List<ExpenseResponseDto> getUserExpenses(long userId);
+    Long deleteExpense(long expenseId);
 }

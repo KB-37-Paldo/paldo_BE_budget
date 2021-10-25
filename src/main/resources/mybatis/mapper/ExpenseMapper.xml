@@ -7,4 +7,10 @@
         from MONEYHISTORY
         where user_id = #{userId};
     </select>
+
+    <delete id="delete" parameterType="long">
+        delete
+        from MONEYHISTORY
+        where history_id = #{expenseId};
+    </delete>
 </mapper>
