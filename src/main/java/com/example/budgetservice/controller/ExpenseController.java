@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
@@ -31,10 +32,12 @@ public class ExpenseController {
     @ApiImplicitParam(name = "userId", value = "사용자 아이디", required = true,
             dataType = "long", defaultValue = "None")
     @GetMapping(value = "/{userId}")
-    public ResponseEntity<List<ExpenseResponseDto>> getUserExpenses(@PathVariable("userId") long userId) {
+    public ResponseEntity<CollectionModel<ExpenseResponseDto>> getUserExpenses(@PathVariable("userId") long userId) {
         List<ExpenseResponseDto> expensesResponse = expenseService.getUserExpenses(userId);
 
-        // WebMvcLinkBuilder expenseLink= linkTo(ExpenseController.class).slash(userId);
-        return ResponseEntity.ok().body(expensesResponse);
+        WebMvcLinkBuilder expenseLink= linkTo(ExpenseController.class).slash(userId);
+        return ResponseEntity.ok()
+                .body(CollectionModel.of(expensesResponse)
+                        .add(expenseLink.withSelfRel()));
     }
 }
