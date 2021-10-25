@@ -19,16 +19,10 @@ spring:
       minimum-idle: 2
       connection-test-query: SELECT 1
 
-#mybatis:
-#  type-aliases-package: com.example.budgetservice.model
-#  mapper-locations: mybatis/mapper/**/*.xml
+mybatis:
+  type-aliases-package: com.example.budgetservice.model
+  mapper-locations: mybatis/mapper/**/*.xml
 
 #logging:
 #  level:
 #    org.springframework:
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: refresh, health, beans, busrefresh
