@@ -1,0 +1,16 @@
+package com.example.budgetservice.form;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+public class ExpenseUpdateForm {
+    private int amount;
+    private String category;
+    private String paymentMethod;
+    private String outlayDatetime;
+    private String source;
+}

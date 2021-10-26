@@ -1,6 +1,7 @@
 package com.example.budgetservice.model;
 
 import com.example.budgetservice.form.ExpenseCreateForm;
+import com.example.budgetservice.form.ExpenseUpdateForm;
 import lombok.*;
 
 import java.util.Date;
@@ -29,5 +30,14 @@ public class ExpenseDto {
         this.outlayDatetime = (new Date()).toString();
         this.source = createForm.getSource();
         this.userId = userId;
+    }
+
+    public ExpenseDto(long expenseId, ExpenseUpdateForm updateForm) {
+        this.historyId = expenseId;
+        this.amount = updateForm.getAmount();
+        this.category = updateForm.getCategory();
+        this.paymentMethod = updateForm.getPaymentMethod();
+        this.outlayDatetime = updateForm.getOutlayDatetime();
+        this.source = updateForm.getSource();
     }
 }

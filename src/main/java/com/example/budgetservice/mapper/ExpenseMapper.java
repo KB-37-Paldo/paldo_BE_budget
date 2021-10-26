@@ -10,4 +10,5 @@ public interface ExpenseMapper {
     List<ExpenseDto> findByUserId(long userId);
     Long deleteById(long expenseId);
     Long create(ExpenseDto expenseDto);
+    Long update(ExpenseDto expenseDto);
 }

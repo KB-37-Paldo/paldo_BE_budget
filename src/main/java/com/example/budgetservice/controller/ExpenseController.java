@@ -1,6 +1,7 @@
 package com.example.budgetservice.controller;
 
 import com.example.budgetservice.form.ExpenseCreateForm;
+import com.example.budgetservice.form.ExpenseUpdateForm;
 import com.example.budgetservice.model.ExpenseResponseDto;
 import com.example.budgetservice.service.ExpenseService;
 import io.swagger.annotations.Api;
@@ -64,5 +65,21 @@ public class ExpenseController {
         WebMvcLinkBuilder expenseLink= linkTo(ExpenseController.class).slash(userId);
         return ResponseEntity.created(expenseLink.toUri())
                 .body(createdExpenseId);
+    }
+
+
+    @ApiOperation(value = "지출 내역 수정", notes = "지출 수정 정보를 입력받아 지출 내역을 수정하고 결과를 반환")
+    @ApiImplicitParams ({
+            @ApiImplicitParam(name = "expenseId", value = "지출 내역 아이디", required = true,
+                    dataType = "long", defaultValue = "None"),
+            @ApiImplicitParam(name = "expenseUpdateForm", value = "지출 내역 수정 정보", required = true,
+                    dataType = "ExpenseUpdateForm", defaultValue = "None")})
+    @PutMapping(value = "/{expenseId}")
+    public ResponseEntity<Long> updateExpense(@PathVariable("expenseId") long expenseId,
+                                              @RequestBody ExpenseUpdateForm expenseUpdateForm) {
+        Long updatedExpenseId = expenseService.updateExpense(expenseId, expenseUpdateForm);
+
+        return ResponseEntity.ok()
+                .body(updatedExpenseId);
     }
 }
