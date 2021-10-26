@@ -2,4 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.budgetservice.mapper.BudgetMapper">
+	
+	<insert id="createBudget" parameterType="com.example.budgetservice.form.BudgetCreateForm"  useGeneratedKeys="true" keyColumn="portfolio_id" keyProperty="portfolioId">
+        INSERT INTO budget.BUGET
+		(buget_id, user_id, foodBgt, shoppingBgt, cafeBgt,trafficBgt, financialBgt, cultureBgt, medicalBgt, subscribeBgt, lifeBgt, congratulations)
+			VALUES(
+			#{budgetId}, #{userId}, #{foodBgt}, #{shoppingBgt}, #{cafeBgt}, #{trafficBgt}, #{financialBgt}, #{cultureBgt}, #{medicalBgt}, #{subscribeBgt}, #{lifeBgt}, #{congratulations}
+			
+			)
+	</insert>
+
+
 </mapper>
