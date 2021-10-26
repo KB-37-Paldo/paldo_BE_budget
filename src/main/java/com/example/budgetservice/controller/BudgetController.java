@@ -18,18 +18,17 @@ import io.swagger.annotations.Api;
 @Api(value = "Budget Service")
 @RestController
 public class BudgetController {
-	 @Autowired
-	    BudgetService budgetService;
+	@Autowired
+	BudgetService budgetService;
 
-		/*
-		 * // 예산 생성
-		 * 
-		 * @PostMapping(value = "/{userId}/budget/{dvn}") public ResponseEntity<Long>
-		 * createBudget(@PathVariable("userId") long userId,
-		 * 
-		 * @RequestBody @Valid BudgetCreateForm budgetCreateForm) {
-		 * budgetCreateForm.setUserId(userId); long budgetId =
-		 * budgetService.createBudget(budgetCreateForm); return new
-		 * ResponseEntity<Long>(budgetId, HttpStatus.CREATED); }
-		 */
+	// 예산 생성
+	@PostMapping(value = "/{userId}/budget/{dvn}")
+	public ResponseEntity<Long> createBudget(@PathVariable("userId") long userId,
+			@RequestBody @Valid BudgetCreateForm budgetCreateForm) {
+		budgetCreateForm.setUserId(userId);
+		
+		long budgetId = budgetService.createBudget(budgetCreateForm);
+		return new ResponseEntity<Long>(budgetId, HttpStatus.CREATED);
+	}
+
 }

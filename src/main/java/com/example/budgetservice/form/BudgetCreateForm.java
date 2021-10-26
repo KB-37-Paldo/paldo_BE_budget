@@ -17,4 +17,11 @@ public class BudgetCreateForm {
 	private int medicalBgt;
 	private int subscribeBgt;
 	private int   lifeBgt;
+	private int congratulations;
+	
+	private long userId;
+	
+	private long budgetId;
+	private String budgetType;
+	
 }
