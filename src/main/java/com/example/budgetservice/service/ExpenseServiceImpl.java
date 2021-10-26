@@ -1,6 +1,7 @@
 package com.example.budgetservice.service;
 
 import com.example.budgetservice.mapper.ExpenseMapper;
+import com.example.budgetservice.form.ExpenseCreateForm;
 import com.example.budgetservice.model.ExpenseDto;
 import com.example.budgetservice.model.ExpenseResponseDto;
 import org.apache.ibatis.session.SqlSession;
@@ -19,7 +20,6 @@ public class ExpenseServiceImpl implements ExpenseService{
     @Override
     public List<ExpenseResponseDto> getUserExpenses(long userId) {
         List<ExpenseDto> expenses = sqlSession.getMapper(ExpenseMapper.class).findByUserId(userId);
-
         return expenses.stream()
                 .map(ExpenseDto::getExpenseResponse)
                 .collect(Collectors.toList());
@@ -27,6 +27,12 @@ public class ExpenseServiceImpl implements ExpenseService{
 
     @Override
     public Long deleteExpense(long expenseId) {
-        return sqlSession.getMapper(ExpenseMapper.class).delete(expenseId);
+        return sqlSession.getMapper(ExpenseMapper.class).deleteById(expenseId);
+    }
+
+    @Override
+    public Long createExpense(long userId, ExpenseCreateForm createForm) {
+        ExpenseDto expense = new ExpenseDto(userId, createForm);
+        return sqlSession.getMapper(ExpenseMapper.class).create(expense);
     }
 }
