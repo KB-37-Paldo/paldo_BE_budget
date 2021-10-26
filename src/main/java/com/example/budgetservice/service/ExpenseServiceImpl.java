@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ExpenseServiceImpl implements ExpenseService{
@@ -34,6 +35,18 @@ public class ExpenseServiceImpl implements ExpenseService{
 
         return expenseList;
     }
+
+
+    @Override
+    public List<ExpenseResponseDto> getUserExpensesByCatgory(long userId, String category, String yearMonth) {
+        List<ExpenseDto> expenses = sqlSession.getMapper(ExpenseMapper.class)
+                .findByCategoryAndYearMonth(userId, category, yearMonth);
+
+        return expenses.stream()
+                .map(ExpenseDto::getExpenseResponse)
+                .collect(Collectors.toList());
+    }
+
 
     @Override
     public Long deleteExpense(long expenseId) {
