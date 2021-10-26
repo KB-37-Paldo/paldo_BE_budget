@@ -14,6 +14,7 @@ import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -27,11 +28,15 @@ public class ExpenseController {
     ExpenseService expenseService;
 
     @ApiOperation(value = "지출 내역 조회", notes = "특정 유저의 지출내역 리스트를 반환")
-    @ApiImplicitParam(name = "userId", value = "사용자 아이디", required = true,
-            dataType = "long", defaultValue = "None")
+    @ApiImplicitParams ({
+            @ApiImplicitParam(name = "userId", value = "사용자 아이디", required = true,
+                    dataType = "long", defaultValue = "None"),
+            @ApiImplicitParam(name = "requestDate", value = "조회 년월", required = true,
+                    dataType = "String", defaultValue = "2021-10")})
     @GetMapping(value = "/{userId}")
-    public ResponseEntity<CollectionModel<ExpenseResponseDto>> getUserExpenses(@PathVariable("userId") long userId) {
-        List<ExpenseResponseDto> expensesResponse = expenseService.getUserExpenses(userId);
+    public ResponseEntity<CollectionModel<ExpenseResponseDto>> getUserExpenses(@PathVariable("userId") long userId,
+                                                                               String requestDate) {
+        List<ExpenseResponseDto> expensesResponse = expenseService.getUserExpenses(userId, requestDate);
 
         WebMvcLinkBuilder expenseLink= linkTo(ExpenseController.class).slash(userId);
         return ResponseEntity.ok()

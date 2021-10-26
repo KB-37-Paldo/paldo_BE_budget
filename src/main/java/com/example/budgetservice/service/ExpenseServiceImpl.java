@@ -9,6 +9,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,8 +21,9 @@ public class ExpenseServiceImpl implements ExpenseService{
     SqlSession sqlSession;
 
     @Override
-    public List<ExpenseResponseDto> getUserExpenses(long userId) {
-        List<ExpenseDto> expenses = sqlSession.getMapper(ExpenseMapper.class).findByUserId(userId);
+    public List<ExpenseResponseDto> getUserExpenses(long userId, String yearMonth) {
+        List<ExpenseDto> expenses = sqlSession.getMapper(ExpenseMapper.class)
+                .findByUserIdAndYearMonth(userId, yearMonth);
         return expenses.stream()
                 .map(ExpenseDto::getExpenseResponse)
                 .collect(Collectors.toList());
@@ -33,7 +36,7 @@ public class ExpenseServiceImpl implements ExpenseService{
 
     @Override
     public Long createExpense(long userId, ExpenseCreateForm createForm) {
-        ExpenseDto expense = new ExpenseDto(userId, createForm);
+        ExpenseDto expense = new ExpenseDto(userId, getCurrentDatetime(), createForm);
         return sqlSession.getMapper(ExpenseMapper.class).create(expense);
     }
 
@@ -41,5 +44,14 @@ public class ExpenseServiceImpl implements ExpenseService{
     public Long updateExpense(long expenseId, ExpenseUpdateForm updateForm) {
         ExpenseDto expense = new ExpenseDto(expenseId, updateForm);
         return sqlSession.getMapper(ExpenseMapper.class).update(expense);
+    }
+
+    private String getCurrentDatetime() {
+        Date date = new Date();
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String currentDatetime = format.format(date);
+
+        return currentDatetime;
     }
 }
