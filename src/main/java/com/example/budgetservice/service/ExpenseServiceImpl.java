@@ -1,5 +1,6 @@
 package com.example.budgetservice.service;
 
+import com.example.budgetservice.form.ExpenseUpdateForm;
 import com.example.budgetservice.mapper.ExpenseMapper;
 import com.example.budgetservice.form.ExpenseCreateForm;
 import com.example.budgetservice.model.ExpenseDto;
@@ -34,5 +35,11 @@ public class ExpenseServiceImpl implements ExpenseService{
     public Long createExpense(long userId, ExpenseCreateForm createForm) {
         ExpenseDto expense = new ExpenseDto(userId, createForm);
         return sqlSession.getMapper(ExpenseMapper.class).create(expense);
+    }
+
+    @Override
+    public Long updateExpense(long expenseId, ExpenseUpdateForm updateForm) {
+        ExpenseDto expense = new ExpenseDto(expenseId, updateForm);
+        return sqlSession.getMapper(ExpenseMapper.class).update(expense);
     }
 }

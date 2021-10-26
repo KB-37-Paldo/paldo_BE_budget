@@ -19,4 +19,11 @@
         insert into MONEYHISTORY (amount, category, payment_method, outlay_datetime, source, user_id)
         value(#{amount}, #{category}, #{paymentMethod}, #{outlayDatetime}, #{source}, #{userId});
     </insert>
+
+    <update id="update" parameterType="ExpenseDto">
+        update MONEYHISTORY
+        set amount = #{amount}, category = #{category}, payment_method = #{paymentMethod},
+            outlay_datetime = #{outlayDatetime}, source = #{source}
+        where history_id = #{historyId};
+    </update>
 </mapper>
