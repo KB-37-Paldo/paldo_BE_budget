@@ -16,7 +16,7 @@ public class BudgetCreateForm {
 	private int cultureBgt;
 	private int medicalBgt;
 	private int subscribeBgt;
-	private int   lifeBgt;
+	private int lifeBgt;
 	private int congratulations;
 	
 	private long userId;

@@ -28,4 +28,11 @@
             outlay_datetime = #{outlayDatetime}, source = #{source}
         where history_id = #{historyId};
     </update>
+
+    <select id="findByUserIdGroupByCategory" parameterType="Map" resultType="map">
+        SELECT category, SUM(amount) as amount
+        FROM MONEYHISTORY
+        WHERE user_id = #{userId} AND DATE_FORMAT(outlay_datetime ,'%Y-%m') = #{lastMonthDate}
+        GROUP BY category
+    </select>
 </mapper>
