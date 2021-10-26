@@ -3,14 +3,20 @@
 
 <mapper namespace="com.example.budgetservice.mapper.ExpenseMapper">
     <select id="findByUserId" parameterType="long" resultType="ExpenseDto">
-        select history_id, amount, category, payment_method, outlay_datetime, source, user_id
+        select history_id as historyId, amount, category, payment_method as paymentMethod,
+               outlay_datetime as outlayDatetime, source, user_id as userId
         from MONEYHISTORY
         where user_id = #{userId};
     </select>
 
-    <delete id="delete" parameterType="long">
+    <delete id="deleteById" parameterType="long">
         delete
         from MONEYHISTORY
         where history_id = #{expenseId};
     </delete>
+
+    <insert id="create" parameterType="ExpenseDto">
+        insert into MONEYHISTORY (amount, category, payment_method, outlay_datetime, source, user_id)
+        value(#{amount}, #{category}, #{paymentMethod}, #{outlayDatetime}, #{source}, #{userId});
+    </insert>
 </mapper>
