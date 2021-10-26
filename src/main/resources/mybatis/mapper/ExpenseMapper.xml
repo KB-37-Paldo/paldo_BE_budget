@@ -11,6 +11,16 @@
         order by outlayDatetime desc;
     </select>
 
+    <select id="findByCategoryAndYearMonth" resultType="ExpenseDto">
+        select history_id as historyId, amount, category, payment_method as paymentMethod,
+               outlay_datetime as outlayDatetime, source, user_id as userId
+        from MONEYHISTORY
+        where user_id = #{userId}
+        and category = #{category}
+        and outlay_datetime LIKE CONCAT(#{yearMonth}, '%')
+        order by outlayDatetime desc;
+    </select>
+
     <delete id="deleteById" parameterType="long">
         delete
         from MONEYHISTORY

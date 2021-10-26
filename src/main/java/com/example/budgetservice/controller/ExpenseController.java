@@ -3,18 +3,17 @@ package com.example.budgetservice.controller;
 import com.example.budgetservice.form.ExpenseCreateForm;
 import com.example.budgetservice.form.ExpenseUpdateForm;
 import com.example.budgetservice.model.ExpenseResponseDto;
+import com.example.budgetservice.model.SortedExpensesDto;
 import com.example.budgetservice.service.ExpenseService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -27,21 +26,39 @@ public class ExpenseController {
     @Autowired
     ExpenseService expenseService;
 
-    @ApiOperation(value = "지출 내역 조회", notes = "특정 유저의 지출내역 리스트를 반환")
+    @ApiOperation(value = "연월별 지출 내역 조회", notes = "특정 유저의 특정년도, 특정월의 지출내역 리스트를 반환")
     @ApiImplicitParams ({
             @ApiImplicitParam(name = "userId", value = "사용자 아이디", required = true,
                     dataType = "long", defaultValue = "None"),
             @ApiImplicitParam(name = "requestDate", value = "조회 년월", required = true,
                     dataType = "String", defaultValue = "2021-10")})
     @GetMapping(value = "/{userId}")
-    public ResponseEntity<CollectionModel<ExpenseResponseDto>> getUserExpenses(@PathVariable("userId") long userId,
-                                                                               String requestDate) {
-        List<ExpenseResponseDto> expensesResponse = expenseService.getUserExpenses(userId, requestDate);
+    public ResponseEntity<List<SortedExpensesDto>> getUserExpensesByYearMonth
+            (@PathVariable("userId") long userId, String requestDate) {
+        List<SortedExpensesDto> expensesResponse = expenseService.getUserExpenses(userId, requestDate);
 
-        WebMvcLinkBuilder expenseLink= linkTo(ExpenseController.class).slash(userId);
-        return ResponseEntity.ok()
-                .body(CollectionModel.of(expensesResponse)
-                        .add(expenseLink.withSelfRel()));
+        return ResponseEntity
+                .ok()
+                .body(expensesResponse);
+    }
+
+    @ApiOperation(value = "항목/연월별 지출 내역 조회", notes = "특정 유저의 특정연도, 특정월의 항목별 지출내역 리스트를 반환")
+    @ApiImplicitParams ({
+            @ApiImplicitParam(name = "userId", value = "사용자 아이디", required = true,
+                    dataType = "long", defaultValue = "None"),
+            @ApiImplicitParam(name = "category", value = "예산 항목", required = true,
+                    dataType = "String", defaultValue = "None"),
+            @ApiImplicitParam(name = "requestDate", value = "조회 년월", required = true,
+                    dataType = "String", defaultValue = "2021-10")})
+    @GetMapping(value = "/{userId}/category")
+    public ResponseEntity<List<ExpenseResponseDto>> getUserExpensesByCategoryAndYearMonth
+            (@PathVariable("userId") long userId, String category, String requestDate) {
+        List<ExpenseResponseDto> expensesResponse =
+                expenseService.getUserExpensesByCatgory(userId, category, requestDate);
+
+        return ResponseEntity
+                .ok()
+                .body(expensesResponse);
     }
 
 
@@ -51,7 +68,9 @@ public class ExpenseController {
     @DeleteMapping(value = "/{expenseId}")
     public ResponseEntity<Long> deleteExpense(@PathVariable("expenseId") long expenseId) {
         Long deletedExpenseId = expenseService.deleteExpense(expenseId);
-        return ResponseEntity.ok()
+
+        return ResponseEntity
+                .ok()
                 .body(deletedExpenseId);
     }
 
@@ -67,8 +86,9 @@ public class ExpenseController {
                                               @RequestBody ExpenseCreateForm expenseCreateForm) {
         Long createdExpenseId = expenseService.createExpense(userId, expenseCreateForm);
 
-        WebMvcLinkBuilder expenseLink= linkTo(ExpenseController.class).slash(userId);
-        return ResponseEntity.created(expenseLink.toUri())
+        WebMvcLinkBuilder expenseLink = linkTo(ExpenseController.class);
+        return ResponseEntity
+                .created(expenseLink.slash(userId).toUri())
                 .body(createdExpenseId);
     }
 
@@ -84,7 +104,8 @@ public class ExpenseController {
                                               @RequestBody ExpenseUpdateForm expenseUpdateForm) {
         Long updatedExpenseId = expenseService.updateExpense(expenseId, expenseUpdateForm);
 
-        return ResponseEntity.ok()
+        return ResponseEntity
+                .ok()
                 .body(updatedExpenseId);
     }
 }
