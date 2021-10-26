@@ -11,5 +11,6 @@ public class ExpenseCreateForm {
     private int amount;
     private String category;
     private String paymentMethod;
+    private String outlayDatetime;
     private String source;
 }

@@ -25,19 +25,11 @@ public class ExpenseDto {
                 this.paymentMethod, this.outlayDatetime, this.source);
     }
 
-    public ExpenseDto(long userId, String yearMonth, ExpenseCreateForm createForm) {
-        Date currentDatetime = new Date();
-
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        String currentDate = format.format(currentDatetime);
-
-        format = new SimpleDateFormat("HH:mm:ss");
-        String currentTime = format.format(currentDatetime);
-
+    public ExpenseDto(long userId, ExpenseCreateForm createForm) {
         this.amount = createForm.getAmount();
         this.category = createForm.getCategory();
         this.paymentMethod = createForm.getPaymentMethod();
-        this.outlayDatetime = yearMonth;
+        this.outlayDatetime = createForm.getOutlayDatetime();
         this.source = createForm.getSource();
         this.userId = userId;
     }

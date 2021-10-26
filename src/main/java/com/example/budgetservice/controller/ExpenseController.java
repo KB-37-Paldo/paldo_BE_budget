@@ -2,19 +2,17 @@ package com.example.budgetservice.controller;
 
 import com.example.budgetservice.form.ExpenseCreateForm;
 import com.example.budgetservice.form.ExpenseUpdateForm;
-import com.example.budgetservice.model.ExpenseResponseDto;
+import com.example.budgetservice.model.SortedExpensesDto;
 import com.example.budgetservice.service.ExpenseService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -34,14 +32,12 @@ public class ExpenseController {
             @ApiImplicitParam(name = "requestDate", value = "조회 년월", required = true,
                     dataType = "String", defaultValue = "2021-10")})
     @GetMapping(value = "/{userId}")
-    public ResponseEntity<CollectionModel<ExpenseResponseDto>> getUserExpenses(@PathVariable("userId") long userId,
-                                                                               String requestDate) {
-        List<ExpenseResponseDto> expensesResponse = expenseService.getUserExpenses(userId, requestDate);
+    public ResponseEntity<List<SortedExpensesDto>> getUserExpenses
+            (@PathVariable("userId") long userId, String requestDate) {
+        List<SortedExpensesDto> expensesResponse = expenseService.getUserExpenses(userId, requestDate);
 
-        WebMvcLinkBuilder expenseLink= linkTo(ExpenseController.class).slash(userId);
         return ResponseEntity.ok()
-                .body(CollectionModel.of(expensesResponse)
-                        .add(expenseLink.withSelfRel()));
+                .body(expensesResponse);
     }
 
 
