@@ -3,7 +3,7 @@ package com.example.budgetservice.controller;
 import com.example.budgetservice.form.ExpenseCreateForm;
 import com.example.budgetservice.form.ExpenseUpdateForm;
 import com.example.budgetservice.model.ExpenseResponseDto;
-import com.example.budgetservice.model.SortedExpensesDto;
+import com.example.budgetservice.model.ExpensesGroupByDayDto;
 import com.example.budgetservice.service.ExpenseService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -26,6 +26,7 @@ public class ExpenseController {
     @Autowired
     ExpenseService expenseService;
 
+    
     @ApiOperation(value = "연월별 지출 내역 조회", notes = "특정 유저의 특정년도, 특정월의 지출내역 리스트를 반환")
     @ApiImplicitParams ({
             @ApiImplicitParam(name = "userId", value = "사용자 아이디", required = true,
@@ -33,14 +34,15 @@ public class ExpenseController {
             @ApiImplicitParam(name = "requestDate", value = "조회 년월", required = true,
                     dataType = "String", defaultValue = "2021-10")})
     @GetMapping(value = "/{userId}")
-    public ResponseEntity<List<SortedExpensesDto>> getUserExpensesByYearMonth
+    public ResponseEntity<List<ExpensesGroupByDayDto>> getUserExpensesByYearMonth
             (@PathVariable("userId") long userId, String requestDate) {
-        List<SortedExpensesDto> expensesResponse = expenseService.getUserExpenses(userId, requestDate);
+        List<ExpensesGroupByDayDto> expensesResponse = expenseService.getUserExpensesByOutlayMonth(userId, requestDate);
 
         return ResponseEntity
                 .ok()
                 .body(expensesResponse);
     }
+
 
     @ApiOperation(value = "항목/연월별 지출 내역 조회", notes = "특정 유저의 특정연도, 특정월의 항목별 지출내역 리스트를 반환")
     @ApiImplicitParams ({
@@ -54,7 +56,7 @@ public class ExpenseController {
     public ResponseEntity<List<ExpenseResponseDto>> getUserExpensesByCategoryAndYearMonth
             (@PathVariable("userId") long userId, String category, String requestDate) {
         List<ExpenseResponseDto> expensesResponse =
-                expenseService.getUserExpensesByCatgory(userId, category, requestDate);
+                expenseService.getUserExpensesByCategory(userId, category, requestDate);
 
         return ResponseEntity
                 .ok()

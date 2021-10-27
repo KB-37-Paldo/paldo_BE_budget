@@ -5,7 +5,7 @@ import com.example.budgetservice.mapper.ExpenseMapper;
 import com.example.budgetservice.form.ExpenseCreateForm;
 import com.example.budgetservice.model.ExpenseDto;
 import com.example.budgetservice.model.ExpenseResponseDto;
-import com.example.budgetservice.model.SortedExpensesDto;
+import com.example.budgetservice.model.ExpensesGroupByDayDto;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,27 +20,30 @@ public class ExpenseServiceImpl implements ExpenseService{
     SqlSession sqlSession;
 
     @Override
-    public List<SortedExpensesDto> getUserExpenses(long userId, String yearMonth) {
+    public List<ExpensesGroupByDayDto> getUserExpensesByOutlayMonth(long userId, String outlayYearMonth) {
         List<ExpenseDto> expenses = sqlSession.getMapper(ExpenseMapper.class)
-                .findByUserIdAndYearMonth(userId, yearMonth);
+                .findByOutlayYearMonth(userId, outlayYearMonth);
 
-        List<SortedExpensesDto> expenseList = new ArrayList<>();
+        List<ExpensesGroupByDayDto> groupByDayExpenseList = new ArrayList<>();
         expenses.forEach(expense -> {
             int day = Integer.parseInt(expense.getOutlayDatetime().substring(8, 10));
-            if(expenseList.size() == 0 || expenseList.get(expenseList.size() - 1).getDay() > day) {
-                expenseList.add(new SortedExpensesDto(day, new ArrayList<>()));
+            int size = groupByDayExpenseList.size();
+
+            if(size == 0 || groupByDayExpenseList.get(size - 1).getDay() > day) {
+                groupByDayExpenseList.add(new ExpensesGroupByDayDto(day, 0, new ArrayList<>()));
             }
-            expenseList.get(expenseList.size() - 1).getExpenseResponses().add(expense.getExpenseResponse());
+            groupByDayExpenseList.get(size - 1).getExpenseResponses().add(expense.getExpenseResponse());
+            groupByDayExpenseList.get(size - 1).addTotalAmount(expense.getAmount());
         });
 
-        return expenseList;
+        return groupByDayExpenseList;
     }
 
 
     @Override
-    public List<ExpenseResponseDto> getUserExpensesByCatgory(long userId, String category, String yearMonth) {
+    public List<ExpenseResponseDto> getUserExpensesByCategory(long userId, String category, String outlayYearMonth) {
         List<ExpenseDto> expenses = sqlSession.getMapper(ExpenseMapper.class)
-                .findByCategoryAndYearMonth(userId, category, yearMonth);
+                .findByCategoryAndOutlayYearMonth(userId, category, outlayYearMonth);
 
         return expenses.stream()
                 .map(ExpenseDto::getExpenseResponse)

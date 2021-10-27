@@ -3,14 +3,14 @@ package com.example.budgetservice.service;
 import com.example.budgetservice.form.ExpenseCreateForm;
 import com.example.budgetservice.form.ExpenseUpdateForm;
 import com.example.budgetservice.model.ExpenseResponseDto;
-import com.example.budgetservice.model.SortedExpensesDto;
+import com.example.budgetservice.model.ExpensesGroupByDayDto;
 
 import java.util.List;
 
 public interface ExpenseService {
 
-    List<SortedExpensesDto> getUserExpenses(long userId, String yearMonth);
-    List<ExpenseResponseDto> getUserExpensesByCatgory(long userId, String category, String yearMonth);
+    List<ExpensesGroupByDayDto> getUserExpensesByOutlayMonth(long userId, String outlayYearMonth);
+    List<ExpenseResponseDto> getUserExpensesByCategory(long userId, String category, String outlayYearMonth);
     Long deleteExpense(long expenseId);
     Long createExpense(long userId, ExpenseCreateForm createForm);
     Long updateExpense(long expenseId, ExpenseUpdateForm updateForm);
