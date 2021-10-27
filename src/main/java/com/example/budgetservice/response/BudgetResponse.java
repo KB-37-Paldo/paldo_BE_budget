@@ -16,29 +16,30 @@ public class BudgetResponse {
     private long userId;
     private long totalOutlay;
     private long totalIncome;
-    private BudgetDetailDto food = new BudgetDetailDto();
-    private BudgetDetailDto shopping = new BudgetDetailDto();
-    private BudgetDetailDto cafe = new BudgetDetailDto();
-    private BudgetDetailDto traffic = new BudgetDetailDto();
-    private BudgetDetailDto financial = new BudgetDetailDto();
-    private BudgetDetailDto culture = new BudgetDetailDto();
-    private BudgetDetailDto medical = new BudgetDetailDto();
-    private BudgetDetailDto subscribe = new BudgetDetailDto();
-    private BudgetDetailDto life = new BudgetDetailDto();
-    private BudgetDetailDto congratulations = new BudgetDetailDto();
+    private BudgetDetailDto food = new BudgetDetailDto("식비");
+    private BudgetDetailDto shopping = new BudgetDetailDto("쇼핑");
+    private BudgetDetailDto cafe = new BudgetDetailDto("카페");
+    private BudgetDetailDto traffic = new BudgetDetailDto("교통");
+    private BudgetDetailDto financial = new BudgetDetailDto("금융");
+    private BudgetDetailDto culture = new BudgetDetailDto("문화");
+    private BudgetDetailDto medical = new BudgetDetailDto("의료");
+    private BudgetDetailDto subscribe = new BudgetDetailDto("구독");
+    private BudgetDetailDto life = new BudgetDetailDto("생활");
+    private BudgetDetailDto congratulations = new BudgetDetailDto("경조");
 
     public void addOutlay(List<Map<String, String>> items) {
         items.forEach((item)->{
-            if (item.get("category").equals("식비")) {this.food.setOutlay(Integer.parseInt(String.valueOf(item.get("amount"))));}
-            else if (item.get("category").equals("쇼핑")) {this.shopping.setOutlay(Integer.parseInt(String.valueOf(item.get("amount"))));}
-            else if (item.get("category").equals("카페")) {this.cafe.setOutlay(Integer.parseInt(String.valueOf(item.get("amount"))));}
-            else if (item.get("category").equals("교통")) {this.traffic.setOutlay(Integer.parseInt(String.valueOf(item.get("amount"))));}
-            else if (item.get("category").equals("금융")) {this.financial.setOutlay(Integer.parseInt(String.valueOf(item.get("amount"))));}
-            else if (item.get("category").equals("문화")) {this.culture.setOutlay(Integer.parseInt(String.valueOf(item.get("amount"))));}
-            else if (item.get("category").equals("의료")) {this.medical.setOutlay(Integer.parseInt(String.valueOf(item.get("amount"))));}
-            else if (item.get("category").equals("구독")) {this.subscribe.setOutlay(Integer.parseInt(String.valueOf(item.get("amount"))));}
-            else if (item.get("category").equals("생활")) {this.life.setOutlay(Integer.parseInt(String.valueOf(item.get("amount"))));}
-            else if (item.get("category").equals("경조")) {this.congratulations.setOutlay(Integer.parseInt(String.valueOf(item.get("amount"))));}
+            if (item.get("category").equals("수입")) {this.totalIncome = Integer.parseInt(String.valueOf(item.get("amount")));}
+            else if (item.get("category").equals("식비")) {this.food.setOutlay(-Integer.parseInt(String.valueOf(item.get("amount"))));}
+            else if (item.get("category").equals("쇼핑")) {this.shopping.setOutlay(-Integer.parseInt(String.valueOf(item.get("amount"))));}
+            else if (item.get("category").equals("카페")) {this.cafe.setOutlay(-Integer.parseInt(String.valueOf(item.get("amount"))));}
+            else if (item.get("category").equals("교통")) {this.traffic.setOutlay(-Integer.parseInt(String.valueOf(item.get("amount"))));}
+            else if (item.get("category").equals("금융")) {this.financial.setOutlay(-Integer.parseInt(String.valueOf(item.get("amount"))));}
+            else if (item.get("category").equals("문화")) {this.culture.setOutlay(-Integer.parseInt(String.valueOf(item.get("amount"))));}
+            else if (item.get("category").equals("의료")) {this.medical.setOutlay(-Integer.parseInt(String.valueOf(item.get("amount"))));}
+            else if (item.get("category").equals("구독")) {this.subscribe.setOutlay(-Integer.parseInt(String.valueOf(item.get("amount"))));}
+            else if (item.get("category").equals("생활")) {this.life.setOutlay(-Integer.parseInt(String.valueOf(item.get("amount"))));}
+            else if (item.get("category").equals("경조")) {this.congratulations.setOutlay(-Integer.parseInt(String.valueOf(item.get("amount"))));}
         });
     }
     public void addAmount(BudgetDto budgetDto) {
