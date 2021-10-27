@@ -33,6 +33,8 @@ public class ExpenseServiceImpl implements ExpenseService{
             if(size == 0 || groupByDayExpenseList.get(size - 1).getDay() > day) {
                 groupByDayExpenseList.add(new ExpensesGroupByDayDto(day, 0, new ArrayList<>()));
             }
+
+            size = groupByDayExpenseList.size();
             groupByDayExpenseList.get(size - 1).getExpenseResponses().add(expense.getExpenseResponse());
             groupByDayExpenseList.get(size - 1).addTotalAmount(expense.getAmount());
         });
