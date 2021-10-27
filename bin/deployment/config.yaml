@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: paldo-budget-config
+data:
+  # db
+  DB_SERVER: mysql
+  DB_PORT: "3306"
+  DB_USERNAME: root
+  DB_PASSWORD: passw0rd
+  # portfolio
+  BUDGET_SERVICE_CONTEXT_PATH: /budget-service
+  BUDGET_SERVICE_PORT: "8002"
+  BUDGET_DB_NAME: budget
+  # kafka
+  KAFKA_BROKER: kafka.default
+  KAFKA_BROKER_PORT: "9092"
+  CONSUMER_GROUP: user01_consumer_group
+  ACCOUNT_TOPIC: bank01

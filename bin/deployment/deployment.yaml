@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: budget-service
+  labels:
+    app: budget-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: budget-service
+  template:
+    metadata:
+      labels:
+        app: budget-service
+    spec:
+      containers:
+      - name: budget-service
+        image: gojeasuk3/budget-service:dev
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8002
+        env:
+        - name: BUDGET_SERVICE_CONTEXT_PATH
+          valueFrom:
+            configMapKeyRef:
+              name: paldo-budget-config
+              key: BUDGET_SERVICE_CONTEXT_PATH
+        - name: BUDGET_SERVICE_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: paldo-budget-config
+              key: BUDGET_SERVICE_PORT
+        - name: DB_SERVER
+          valueFrom:
+            configMapKeyRef:
+              name: paldo-budget-config
+              key: DB_SERVER
+        - name: DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: paldo-budget-config
+              key: DB_PORT
+        - name: BUDGET_DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: paldo-budget-config
+              key: BUDGET_DB_NAME
+        - name: DB_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: paldo-budget-config
+              key: DB_USERNAME
+        - name: DB_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              name: paldo-budget-config
+              key: DB_PASSWORD
