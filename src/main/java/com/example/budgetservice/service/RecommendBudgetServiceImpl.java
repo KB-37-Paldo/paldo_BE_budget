@@ -1,6 +1,6 @@
 package com.example.budgetservice.service;
 
-import com.example.budgetservice.model.BudgetResponse;
+import com.example.budgetservice.response.BudgetResponse;
 import org.springframework.stereotype.Service;
 
 @Service

@@ -8,6 +8,7 @@ import lombok.*;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class ExpenseDto {
     private long historyId;
     private int amount;

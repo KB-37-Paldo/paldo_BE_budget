@@ -4,6 +4,7 @@ import com.example.budgetservice.form.ExpenseUpdateForm;
 import com.example.budgetservice.mapper.ExpenseMapper;
 import com.example.budgetservice.form.ExpenseCreateForm;
 import com.example.budgetservice.model.ExpenseDto;
+import com.example.budgetservice.model.ExpenseWeekAmountDto;
 import com.example.budgetservice.response.ExpenseResponseDto;
 import com.example.budgetservice.model.ExpensesGroupByCategoryDto;
 import com.example.budgetservice.model.ExpensesGroupByDayDto;
@@ -59,6 +60,29 @@ public class ExpenseServiceImpl implements ExpenseService{
         return new ExpensesGroupByCategoryDto(totalAmount, expenseList);
     }
 
+    @Override
+    public List<ExpenseWeekAmountDto> getUserWeekExpenses(long userId, String outlayYearMonth) {
+        List<ExpenseDto> expenses = sqlSession.getMapper(ExpenseMapper.class)
+                .findByOutlayYearMonth(userId, outlayYearMonth);
+
+        List<ExpenseWeekAmountDto> expenseWeekAmounts = new ArrayList<>();
+        expenses.forEach(expense -> {
+            int week = getWeekOfMonth(expense.getOutlayDatetime());
+            int size = expenseWeekAmounts.size();
+
+            if(size == 0 || expenseWeekAmounts.get(size - 1).getWeek() > week) {
+                expenseWeekAmounts.add(new ExpenseWeekAmountDto(week, 0L));
+            }
+
+            size = expenseWeekAmounts.size();
+            expenseWeekAmounts.get(size - 1).addTotalAmount(expense.getAmount());
+        });
+
+        Collections.sort(expenseWeekAmounts);
+
+        return expenseWeekAmounts;
+    }
+
 
     @Override
     public Long deleteExpense(long expenseId) {
@@ -77,5 +101,17 @@ public class ExpenseServiceImpl implements ExpenseService{
     public Long updateExpense(long expenseId, ExpenseUpdateForm updateForm) {
         ExpenseDto expense = new ExpenseDto(expenseId, updateForm);
         return sqlSession.getMapper(ExpenseMapper.class).update(expense);
+    }
+
+    private int getWeekOfMonth(String datetime) {
+        int year = Integer.parseInt(datetime.substring(0,4));
+        int month = Integer.parseInt(datetime.substring(5, 7)) - 1;
+        int day = Integer.parseInt(datetime.substring(8, 10));
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, day);
+        int week = calendar.get(Calendar.WEEK_OF_MONTH);
+
+        return week;
     }
 }
