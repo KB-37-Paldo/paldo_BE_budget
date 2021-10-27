@@ -3,6 +3,7 @@ package com.example.budgetservice.controller;
 import com.example.budgetservice.form.ExpenseCreateForm;
 import com.example.budgetservice.form.ExpenseUpdateForm;
 import com.example.budgetservice.model.ExpenseResponseDto;
+import com.example.budgetservice.model.ExpensesGroupByCategoryDto;
 import com.example.budgetservice.model.ExpensesGroupByDayDto;
 import com.example.budgetservice.service.ExpenseService;
 import io.swagger.annotations.Api;
@@ -26,7 +27,7 @@ public class ExpenseController {
     @Autowired
     ExpenseService expenseService;
 
-    
+
     @ApiOperation(value = "연월별 지출 내역 조회", notes = "특정 유저의 특정년도, 특정월의 지출내역 리스트를 반환")
     @ApiImplicitParams ({
             @ApiImplicitParam(name = "userId", value = "사용자 아이디", required = true,
@@ -53,9 +54,9 @@ public class ExpenseController {
             @ApiImplicitParam(name = "requestDate", value = "조회 년월", required = true,
                     dataType = "String", defaultValue = "2021-10")})
     @GetMapping(value = "/{userId}/category")
-    public ResponseEntity<List<ExpenseResponseDto>> getUserExpensesByCategoryAndYearMonth
+    public ResponseEntity<ExpensesGroupByCategoryDto> getUserExpensesByCategoryAndYearMonth
             (@PathVariable("userId") long userId, String category, String requestDate) {
-        List<ExpenseResponseDto> expensesResponse =
+        ExpensesGroupByCategoryDto expensesResponse =
                 expenseService.getUserExpensesByCategory(userId, category, requestDate);
 
         return ResponseEntity

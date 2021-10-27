@@ -5,6 +5,7 @@ import com.example.budgetservice.mapper.ExpenseMapper;
 import com.example.budgetservice.form.ExpenseCreateForm;
 import com.example.budgetservice.model.ExpenseDto;
 import com.example.budgetservice.model.ExpenseResponseDto;
+import com.example.budgetservice.model.ExpensesGroupByCategoryDto;
 import com.example.budgetservice.model.ExpensesGroupByDayDto;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,13 +42,19 @@ public class ExpenseServiceImpl implements ExpenseService{
 
 
     @Override
-    public List<ExpenseResponseDto> getUserExpensesByCategory(long userId, String category, String outlayYearMonth) {
+    public ExpensesGroupByCategoryDto getUserExpensesByCategory(long userId, String category, String outlayYearMonth) {
         List<ExpenseDto> expenses = sqlSession.getMapper(ExpenseMapper.class)
                 .findByCategoryAndOutlayYearMonth(userId, category, outlayYearMonth);
 
-        return expenses.stream()
+        int totalAmount = expenses.stream()
+                .mapToInt(ExpenseDto::getAmount)
+                .sum();
+
+        List<ExpenseResponseDto> expenseList = expenses.stream()
                 .map(ExpenseDto::getExpenseResponse)
                 .collect(Collectors.toList());
+
+        return new ExpensesGroupByCategoryDto(totalAmount, expenseList);
     }
 
 
