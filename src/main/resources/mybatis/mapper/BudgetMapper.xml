@@ -3,7 +3,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.budgetservice.mapper.BudgetMapper">
 	
-	<insert id="createBudget" parameterType="com.example.budgetservice.form.BudgetCreateForm">
+	<insert id="createBudget" parameterType="com.example.budgetservice.form.BudgetCreateForm"
+			useGeneratedKeys="true" keyColumn="budget_id">
         INSERT INTO budget.BUDGET
 			(user_id, foodBgt, shoppingBgt, cafeBgt, trafficBgt, financialBgt, cultureBgt, medicalBgt, subscribeBgt, lifeBgt, congratulations)
 		VALUES(#{userId}, #{food}, #{shopping}, #{cafe}, #{traffic}, #{financial}, #{culture}, #{medical}, #{subscribe}, #{life}, #{congratulations})

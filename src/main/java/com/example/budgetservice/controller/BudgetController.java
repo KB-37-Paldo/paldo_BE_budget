@@ -1,20 +1,18 @@
 package com.example.budgetservice.controller;
 
-import com.example.budgetservice.model.BudgetResponse;
+import com.example.budgetservice.form.BudgetCreateForm;
+import com.example.budgetservice.response.BudgetResponse;
 import com.example.budgetservice.service.BudgetService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @Api(value = "Budget Service")
 @RestController
@@ -24,9 +22,10 @@ public class BudgetController {
 
 	// 예산 생성
 	@PostMapping(value = "/{userId}/budget")
-	public ResponseEntity<Long> createBudget(@PathVariable("userId") long userId) {
-		
-		long budgetId = budgetService.createBudget(userId);
+	public ResponseEntity<Long> createBudget(@PathVariable("userId") long userId,
+											 @RequestBody @Valid BudgetCreateForm budgetCreateForm) {
+		budgetCreateForm.setUserId(userId);
+		long budgetId = budgetService.createBudget(budgetCreateForm);
 		return new ResponseEntity<Long>(budgetId, HttpStatus.CREATED);
 	}
 

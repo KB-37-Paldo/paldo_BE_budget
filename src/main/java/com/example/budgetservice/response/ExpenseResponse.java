@@ -1,4 +1,4 @@
-package com.example.budgetservice.model;
+package com.example.budgetservice.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ExpenseResponseDto {
+public class ExpenseResponse {
     private long expenseId;
     private int amount;
     private String category;
