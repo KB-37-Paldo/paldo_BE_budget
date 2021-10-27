@@ -1,0 +1,48 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.budgetservice.mapper.ExpenseMapper">
+    <select id="findByOutlayYearMonth" resultType="ExpenseDto">
+        select history_id as historyId, amount, category, payment_method as paymentMethod,
+               outlay_datetime as outlayDatetime, source, user_id as userId
+        from MONEYHISTORY
+        where user_id = #{userId}
+        and outlay_datetime LIKE CONCAT(#{outlayYearMonth}, '%')
+        order by outlayDatetime desc;
+    </select>
+
+    <select id="findByCategoryAndOutlayYearMonth" resultType="ExpenseDto">
+        select history_id as historyId, amount, category, payment_method as paymentMethod,
+               outlay_datetime as outlayDatetime, source, user_id as userId
+        from MONEYHISTORY
+        where user_id = #{userId}
+        and category = #{category}
+        and outlay_datetime LIKE CONCAT(#{outlayYearMonth}, '%')
+        order by outlayDatetime desc;
+    </select>
+
+    <delete id="deleteById" parameterType="long">
+        delete
+        from MONEYHISTORY
+        where history_id = #{expenseId};
+    </delete>
+
+    <insert id="create" parameterType="ExpenseDto">
+        insert into MONEYHISTORY (amount, category, payment_method, outlay_datetime, source, user_id)
+        value(#{amount}, #{category}, #{paymentMethod}, #{outlayDatetime}, #{source}, #{userId});
+    </insert>
+
+    <update id="update" parameterType="ExpenseDto">
+        update MONEYHISTORY
+        set amount = #{amount}, category = #{category}, payment_method = #{paymentMethod},
+            outlay_datetime = #{outlayDatetime}, source = #{source}
+        where history_id = #{historyId};
+    </update>
+
+    <select id="findByUserIdGroupByCategory" parameterType="Map" resultType="map">
+        SELECT category, CONVERT(SUM(amount), CHAR) as amount
+        FROM MONEYHISTORY
+        WHERE user_id = #{userId} AND DATE_FORMAT(outlay_datetime ,'%Y-%m') = #{lastMonthDate}
+        GROUP BY category
+    </select>
+</mapper>
