@@ -14,6 +14,7 @@ import java.util.Map;
 @NoArgsConstructor
 public class BudgetResponse {
     private long userId;
+    private long totalAmount;
     private long totalOutlay;
     private long totalIncome;
     private BudgetDetailDto food = new BudgetDetailDto("식비");
@@ -66,5 +67,16 @@ public class BudgetResponse {
         this.totalOutlay += this.subscribe.getOutlay();
         this.totalOutlay += this.life.getOutlay();
         this.totalOutlay += this.congratulations.getOutlay();
+        this.totalAmount = 0;
+        this.totalAmount += this.food.getAmount();
+        this.totalAmount += this.shopping.getAmount();
+        this.totalAmount += this.cafe.getAmount();
+        this.totalAmount += this.traffic.getAmount();
+        this.totalAmount += this.financial.getAmount();
+        this.totalAmount += this.culture.getAmount();
+        this.totalAmount += this.medical.getAmount();
+        this.totalAmount += this.subscribe.getAmount();
+        this.totalAmount += this.life.getAmount();
+        this.totalAmount += this.congratulations.getAmount();
     }
 }
