@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ExpenseResponseDto {
+public class ExpenseResponse {
     private long expenseId;
     private int amount;
     private String category;

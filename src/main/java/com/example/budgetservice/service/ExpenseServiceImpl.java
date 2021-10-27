@@ -5,7 +5,7 @@ import com.example.budgetservice.mapper.ExpenseMapper;
 import com.example.budgetservice.form.ExpenseCreateForm;
 import com.example.budgetservice.model.ExpenseDto;
 import com.example.budgetservice.model.ExpenseWeekAmountDto;
-import com.example.budgetservice.response.ExpenseResponseDto;
+import com.example.budgetservice.response.ExpenseResponse;
 import com.example.budgetservice.model.ExpensesGroupByCategoryDto;
 import com.example.budgetservice.model.ExpensesGroupByDayDto;
 import org.apache.ibatis.session.SqlSession;
@@ -29,15 +29,15 @@ public class ExpenseServiceImpl implements ExpenseService{
         List<ExpensesGroupByDayDto> groupByDayExpenseList = new ArrayList<>();
         expenses.forEach(expense -> {
             int day = Integer.parseInt(expense.getOutlayDatetime().substring(8, 10));
-            int size = groupByDayExpenseList.size();
 
-            if(size == 0 || groupByDayExpenseList.get(size - 1).getDay() > day) {
-                groupByDayExpenseList.add(new ExpensesGroupByDayDto(day, 0, new ArrayList<>()));
+            if(!hasDay(day, groupByDayExpenseList)) {
+                ExpensesGroupByDayDto addedExpense = new ExpensesGroupByDayDto(day, 0, new ArrayList<>());
+                groupByDayExpenseList.add(addedExpense);
             }
 
-            size = groupByDayExpenseList.size();
-            groupByDayExpenseList.get(size - 1).getExpenseResponses().add(expense.getExpenseResponse());
-            groupByDayExpenseList.get(size - 1).addTotalAmount(expense.getAmount());
+            ExpensesGroupByDayDto updateExpenses = getExpensesByDay(day, groupByDayExpenseList);
+            updateExpenses.getExpenseResponses().add(expense.getExpenseResponse());
+            updateExpenses.addTotalAmount(expense.getAmount());
         });
 
         return groupByDayExpenseList;
@@ -53,12 +53,13 @@ public class ExpenseServiceImpl implements ExpenseService{
                 .mapToInt(ExpenseDto::getAmount)
                 .sum();
 
-        List<ExpenseResponseDto> expenseList = expenses.stream()
+        List<ExpenseResponse> expenseList = expenses.stream()
                 .map(ExpenseDto::getExpenseResponse)
                 .collect(Collectors.toList());
 
         return new ExpensesGroupByCategoryDto(totalAmount, expenseList);
     }
+
 
     @Override
     public List<ExpenseWeekAmountDto> getUserWeekExpenses(long userId, String outlayYearMonth) {
@@ -68,18 +69,16 @@ public class ExpenseServiceImpl implements ExpenseService{
         List<ExpenseWeekAmountDto> expenseWeekAmounts = new ArrayList<>();
         expenses.forEach(expense -> {
             int week = getWeekOfMonth(expense.getOutlayDatetime());
-            int size = expenseWeekAmounts.size();
-
-            if(size == 0 || expenseWeekAmounts.get(size - 1).getWeek() > week) {
-                expenseWeekAmounts.add(new ExpenseWeekAmountDto(week, 0L));
+            if(!hasWeek(week, expenseWeekAmounts)) {
+                ExpenseWeekAmountDto addedExpense = new ExpenseWeekAmountDto(week, 0);
+                expenseWeekAmounts.add(addedExpense);
             }
 
-            size = expenseWeekAmounts.size();
-            expenseWeekAmounts.get(size - 1).addTotalAmount(expense.getAmount());
+            ExpenseWeekAmountDto expenseWeekAmount = getExpenseWeekAmountByWeek(week, expenseWeekAmounts);
+            expenseWeekAmount.addTotalAmount(expense.getAmount());
         });
 
         Collections.sort(expenseWeekAmounts);
-
         return expenseWeekAmounts;
     }
 
@@ -103,6 +102,27 @@ public class ExpenseServiceImpl implements ExpenseService{
         return sqlSession.getMapper(ExpenseMapper.class).update(expense);
     }
 
+
+    private boolean hasDay(int day, List<ExpensesGroupByDayDto> expensesGroupByDayList) {
+        boolean haveDay = false;
+        for(int i = 0; i < expensesGroupByDayList.size(); i++) {
+            if(expensesGroupByDayList.get(i).getDay() == day) {
+                haveDay = true;
+                break;
+            }
+        }
+        return haveDay;
+    }
+
+    private ExpensesGroupByDayDto getExpensesByDay (int day, List<ExpensesGroupByDayDto> expensesGroupByDay) {
+        for(int i = 0; i < expensesGroupByDay.size(); i++) {
+            if(expensesGroupByDay.get(i).getDay() == day) {
+                return expensesGroupByDay.get(i);
+            }
+        }
+        return null;
+    }
+
     private int getWeekOfMonth(String datetime) {
         int year = Integer.parseInt(datetime.substring(0,4));
         int month = Integer.parseInt(datetime.substring(5, 7)) - 1;
@@ -113,5 +133,25 @@ public class ExpenseServiceImpl implements ExpenseService{
         int week = calendar.get(Calendar.WEEK_OF_MONTH);
 
         return week;
+    }
+
+    private boolean hasWeek(int week, List<ExpenseWeekAmountDto> expenseWeekAmounts) {
+        boolean haveWeek = false;
+        for(int i = 0; i < expenseWeekAmounts.size(); i++) {
+            if(expenseWeekAmounts.get(i).getWeek() == week) {
+                haveWeek = true;
+                break;
+            }
+        }
+        return haveWeek;
+    }
+
+    private ExpenseWeekAmountDto getExpenseWeekAmountByWeek(int week, List<ExpenseWeekAmountDto> expenseWeekAmounts) {
+        for(int i = 0; i < expenseWeekAmounts.size(); i++) {
+            if(expenseWeekAmounts.get(i).getWeek() == week) {
+                return expenseWeekAmounts.get(i);
+            }
+        }
+        return null;
     }
 }

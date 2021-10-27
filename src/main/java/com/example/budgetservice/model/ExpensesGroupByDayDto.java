@@ -1,6 +1,6 @@
 package com.example.budgetservice.model;
 
-import com.example.budgetservice.response.ExpenseResponseDto;
+import com.example.budgetservice.response.ExpenseResponse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +14,7 @@ public class ExpensesGroupByDayDto {
 
     private int day;
     private int totalAmount;
-    private List<ExpenseResponseDto> expenseResponses;
+    private List<ExpenseResponse> expenseResponses;
 
     public void addTotalAmount(int addValue) {
         this.totalAmount += addValue;

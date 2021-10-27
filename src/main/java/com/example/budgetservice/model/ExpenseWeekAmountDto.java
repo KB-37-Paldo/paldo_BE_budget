@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ExpenseWeekAmountDto implements Comparable<ExpenseWeekAmountDto>{
     private Integer week;
-    private Long totalAmount;
+    private int totalAmount;
 
-    public void addTotalAmount(long addValue) {
+    public void addTotalAmount(int addValue) {
         this.totalAmount += addValue;
     }
 

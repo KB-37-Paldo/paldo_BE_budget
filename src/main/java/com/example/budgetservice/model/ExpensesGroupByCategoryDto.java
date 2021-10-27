@@ -1,6 +1,6 @@
 package com.example.budgetservice.model;
 
-import com.example.budgetservice.response.ExpenseResponseDto;
+import com.example.budgetservice.response.ExpenseResponse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,5 +12,5 @@ import java.util.List;
 @AllArgsConstructor
 public class ExpensesGroupByCategoryDto {
     private int totalAmount;
-    private List<ExpenseResponseDto> expenseResponses;
+    private List<ExpenseResponse> expenseResponses;
 }
