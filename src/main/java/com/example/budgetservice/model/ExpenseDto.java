@@ -2,13 +2,12 @@ package com.example.budgetservice.model;
 
 import com.example.budgetservice.form.ExpenseCreateForm;
 import com.example.budgetservice.form.ExpenseUpdateForm;
-import com.example.budgetservice.response.ExpenseResponseDto;
+import com.example.budgetservice.response.ExpenseResponse;
 import lombok.*;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class ExpenseDto {
     private long historyId;
     private int amount;
@@ -18,8 +17,8 @@ public class ExpenseDto {
     private String source;
     private long userId;
 
-    public ExpenseResponseDto getExpenseResponse() {
-        return new ExpenseResponseDto(this.historyId, this.amount, this.category,
+    public ExpenseResponse getExpenseResponse() {
+        return new ExpenseResponse(this.historyId, this.amount, this.category,
                 this.paymentMethod, this.outlayDatetime, this.source);
     }
 
