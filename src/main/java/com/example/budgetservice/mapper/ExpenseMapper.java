@@ -16,5 +16,5 @@ public interface ExpenseMapper {
     Long deleteById(long expenseId);
     Long create(ExpenseDto expenseDto);
     Long update(ExpenseDto expenseDto);
-    List<Map<String, Integer>> findByUserIdGroupByCategory(long userId, String lastMonthDate);
+    List<Map<String, String>> findByUserIdGroupByCategory(long userId, String lastMonthDate);
 }

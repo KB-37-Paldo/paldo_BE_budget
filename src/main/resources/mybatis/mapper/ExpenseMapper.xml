@@ -40,7 +40,7 @@
     </update>
 
     <select id="findByUserIdGroupByCategory" parameterType="Map" resultType="map">
-        SELECT category, SUM(amount) as amount
+        SELECT category, CONVERT(SUM(amount), CHAR) as amount
         FROM MONEYHISTORY
         WHERE user_id = #{userId} AND DATE_FORMAT(outlay_datetime ,'%Y-%m') = #{lastMonthDate}
         GROUP BY category
