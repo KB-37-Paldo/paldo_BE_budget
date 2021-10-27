@@ -1,5 +1,6 @@
 package com.example.budgetservice.model;
 
+import com.example.budgetservice.response.ExpenseResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

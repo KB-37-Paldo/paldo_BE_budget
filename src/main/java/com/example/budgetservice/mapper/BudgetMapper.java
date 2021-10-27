@@ -5,8 +5,10 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.example.budgetservice.form.BudgetCreateForm;
 
+import java.util.Optional;
+
 @Mapper
 public interface BudgetMapper {
 	long createBudget(BudgetDto budgetDto);
-	BudgetDto findByUserId(long user);
+	Optional<BudgetDto> findByUserId(long user);
 }

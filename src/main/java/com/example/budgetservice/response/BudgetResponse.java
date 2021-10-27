@@ -1,5 +1,7 @@
-package com.example.budgetservice.model;
+package com.example.budgetservice.response;
 
+import com.example.budgetservice.model.BudgetDetailDto;
+import com.example.budgetservice.model.BudgetDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

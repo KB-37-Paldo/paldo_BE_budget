@@ -2,6 +2,7 @@ package com.example.budgetservice.model;
 
 import com.example.budgetservice.form.ExpenseCreateForm;
 import com.example.budgetservice.form.ExpenseUpdateForm;
+import com.example.budgetservice.response.ExpenseResponseDto;
 import lombok.*;
 
 @Getter

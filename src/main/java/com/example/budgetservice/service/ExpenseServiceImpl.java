@@ -4,7 +4,7 @@ import com.example.budgetservice.form.ExpenseUpdateForm;
 import com.example.budgetservice.mapper.ExpenseMapper;
 import com.example.budgetservice.form.ExpenseCreateForm;
 import com.example.budgetservice.model.ExpenseDto;
-import com.example.budgetservice.model.ExpenseResponseDto;
+import com.example.budgetservice.response.ExpenseResponseDto;
 import com.example.budgetservice.model.ExpensesGroupByCategoryDto;
 import com.example.budgetservice.model.ExpensesGroupByDayDto;
 import org.apache.ibatis.session.SqlSession;

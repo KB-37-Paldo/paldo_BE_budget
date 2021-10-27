@@ -1,4 +1,4 @@
-package com.example.budgetservice.model;
+package com.example.budgetservice.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

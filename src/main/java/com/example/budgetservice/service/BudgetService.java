@@ -1,6 +1,6 @@
 package com.example.budgetservice.service;
 
-import com.example.budgetservice.model.BudgetResponse;
+import com.example.budgetservice.response.BudgetResponse;
 
 public interface BudgetService {
 	 //예산 생성
