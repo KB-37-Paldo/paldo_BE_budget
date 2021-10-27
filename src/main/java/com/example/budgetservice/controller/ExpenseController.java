@@ -2,7 +2,6 @@ package com.example.budgetservice.controller;
 
 import com.example.budgetservice.form.ExpenseCreateForm;
 import com.example.budgetservice.form.ExpenseUpdateForm;
-import com.example.budgetservice.model.ExpenseResponseDto;
 import com.example.budgetservice.model.ExpensesGroupByCategoryDto;
 import com.example.budgetservice.model.ExpensesGroupByDayDto;
 import com.example.budgetservice.service.ExpenseService;

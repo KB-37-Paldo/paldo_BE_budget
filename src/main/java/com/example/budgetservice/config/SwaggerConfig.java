@@ -27,8 +27,8 @@ public class SwaggerConfig {
 	    
 	    private ApiInfo apiInfo() {
 	        return new ApiInfoBuilder()
-	                .title( "Portfolio Service Swagger")
-	                .description("MoneyMany의 백엔드 포트폴리오 서비스 API 명세")
+	                .title( "Budget Service Swagger")
+	                .description("MoneyMany의 백엔드 예산 서비스 API 명세")
 	                .version("1.0")
 	                .build();
 	    }
