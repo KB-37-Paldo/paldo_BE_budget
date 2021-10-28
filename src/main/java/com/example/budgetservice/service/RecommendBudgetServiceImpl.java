@@ -1,7 +1,6 @@
 package com.example.budgetservice.service;
 
 import com.example.budgetservice.mapper.UserMapper;
-import com.example.budgetservice.model.BudgetResponse;
 import com.example.budgetservice.model.UserDto;
 
 import java.io.BufferedReader;

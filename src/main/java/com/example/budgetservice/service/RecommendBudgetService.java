@@ -5,7 +5,6 @@ import java.io.IOException;
 
 import org.json.simple.parser.ParseException;
 
-import com.example.budgetservice.model.BudgetResponse;
 import com.example.budgetservice.response.BudgetResponse;
 
 public interface RecommendBudgetService {
