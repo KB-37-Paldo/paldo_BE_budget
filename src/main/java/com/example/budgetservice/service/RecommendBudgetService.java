@@ -5,9 +5,9 @@ import java.io.IOException;
 
 import org.json.simple.parser.ParseException;
 
-import com.example.budgetservice.response.BudgetResponse;
+import com.example.budgetservice.response.RecommendResponse;
 
 public interface RecommendBudgetService {
 	// 추천예산 조회
-	BudgetResponse findByUserID(long userId) throws IOException, ParseException;
+	RecommendResponse findByUserID(long userId) throws IOException, ParseException;
 }
