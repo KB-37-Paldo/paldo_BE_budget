@@ -17,4 +17,11 @@
 			lifeBgt AS life, congratulations
 		FROM BUDGET;
 	</select>
+
+	<update id="updateBudget" parameterType="com.example.budgetservice.form.BudgetUpdateForm"
+			useGeneratedKeys="true" keyColumn="budget_id">
+		UPDATE BUDGET
+		SET foodBgt=#{food}, shoppingBgt=#{shopping}, cafeBgt=#{cafe}, trafficBgt=#{traffic}, cultureBgt=#{culture}, medicalBgt=#{medical}, lifeBgt=#{life}, congratulations=#{congratulations}
+		WHERE user_id = #{userId};
+	</update>
 </mapper>

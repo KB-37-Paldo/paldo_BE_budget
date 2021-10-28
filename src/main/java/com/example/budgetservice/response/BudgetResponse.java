@@ -79,4 +79,18 @@ public class BudgetResponse {
         this.totalAmount += this.life.getAmount();
         this.totalAmount += this.congratulations.getAmount();
     }
+    public void setLastMonthOutlay(List<Map<String, String>> items) {
+        items.forEach((item)->{
+            if (item.get("category").equals("식비")) {this.food.setLastMonthOutlay(-Integer.parseInt(String.valueOf(item.get("amount"))));}
+            else if (item.get("category").equals("쇼핑")) {this.shopping.setLastMonthOutlay(-Integer.parseInt(String.valueOf(item.get("amount"))));}
+            else if (item.get("category").equals("카페")) {this.cafe.setLastMonthOutlay(-Integer.parseInt(String.valueOf(item.get("amount"))));}
+            else if (item.get("category").equals("교통")) {this.traffic.setLastMonthOutlay(-Integer.parseInt(String.valueOf(item.get("amount"))));}
+            else if (item.get("category").equals("금융")) {this.financial.setLastMonthOutlay(-Integer.parseInt(String.valueOf(item.get("amount"))));}
+            else if (item.get("category").equals("문화")) {this.culture.setLastMonthOutlay(-Integer.parseInt(String.valueOf(item.get("amount"))));}
+            else if (item.get("category").equals("의료")) {this.medical.setLastMonthOutlay(-Integer.parseInt(String.valueOf(item.get("amount"))));}
+            else if (item.get("category").equals("구독")) {this.subscribe.setLastMonthOutlay(-Integer.parseInt(String.valueOf(item.get("amount"))));}
+            else if (item.get("category").equals("생활")) {this.life.setLastMonthOutlay(-Integer.parseInt(String.valueOf(item.get("amount"))));}
+            else if (item.get("category").equals("경조")) {this.congratulations.setLastMonthOutlay(-Integer.parseInt(String.valueOf(item.get("amount"))));}
+        });
+    }
 }

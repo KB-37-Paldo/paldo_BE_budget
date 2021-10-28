@@ -1,6 +1,7 @@
 package com.example.budgetservice.controller;
 
 import com.example.budgetservice.form.BudgetCreateForm;
+import com.example.budgetservice.form.BudgetUpdateForm;
 import com.example.budgetservice.response.BudgetResponse;
 import com.example.budgetservice.service.BudgetService;
 import io.swagger.annotations.Api;
@@ -36,6 +37,19 @@ public class BudgetController {
 		return new ResponseEntity<Long>(budgetId, HttpStatus.CREATED);
 	}
 
+	@ApiOperation(value = "예산 수정", notes = "특정 유저의 한달 예산을 수정")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "userId", value = "유저 아이디", required = true,
+					dataType = "long", defaultValue = "None"),
+			@ApiImplicitParam(name = "budgetUpdateForm", value = "예산 수정 정보", required = true,
+					dataType = "BudgetUpdateForm", defaultValue = "None")})
+	@PutMapping(value = "/{userId}/budget")
+	public ResponseEntity<Long> updateBudget(@PathVariable("userId") long userId,
+											 @RequestBody @Valid BudgetUpdateForm budgetUpdateForm) {
+		budgetUpdateForm.setUserId(userId);
+		long budgetId = budgetService.updateBudget(budgetUpdateForm);
+		return new ResponseEntity<Long>(budgetId, HttpStatus.OK);
+	}
 
 	@ApiOperation(value = "예산 조회", notes = "특정 유저의 특정년도, 특정월의 예산 정보를 반환")
 	@ApiImplicitParam(name = "requestDate", value = "조회 년월", required = true,

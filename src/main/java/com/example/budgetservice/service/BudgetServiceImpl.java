@@ -3,6 +3,7 @@ package com.example.budgetservice.service;
 import com.example.budgetservice.exception.ErrorCode;
 import com.example.budgetservice.exception.NotBudgetException;
 import com.example.budgetservice.form.BudgetCreateForm;
+import com.example.budgetservice.form.BudgetUpdateForm;
 import com.example.budgetservice.mapper.BudgetMapper;
 import com.example.budgetservice.mapper.ExpenseMapper;
 import com.example.budgetservice.model.BudgetDto;
@@ -34,10 +35,27 @@ public class BudgetServiceImpl implements BudgetService{
 		// category별 지출조회
 		List<Map<String, String>> result = sqlsession.getMapper(ExpenseMapper.class)
 				.findByUserIdGroupByCategory(userId, requestDate);
-		budgetResponse.addOutlay(result);
 
+		int year = Integer.parseInt(requestDate.substring(0,4));
+		int month = Integer.parseInt(requestDate.substring(5, 7)) - 1;
+
+		DateFormat df = new SimpleDateFormat("yyyy-MM");
+		Calendar cal = Calendar.getInstance();
+		cal.set(year, month, 1);
+		cal.add ( cal.MONTH, -1 );
+
+		List<Map<String, String>> lastMonthResult = sqlsession.getMapper(ExpenseMapper.class)
+				.findByUserIdGroupByCategory(userId, df.format(cal.getTime()));
+		System.out.println("lastMonthResult = " + lastMonthResult);
+		budgetResponse.setLastMonthOutlay(lastMonthResult);
+		budgetResponse.addOutlay(result);
 		budgetResponse.addAmount(budgetDto);
 		budgetResponse.setTotal();
 		return budgetResponse;
+	}
+
+	@Override
+	public long updateBudget(BudgetUpdateForm budgetUpdateForm) {
+		return sqlsession.getMapper(BudgetMapper.class).updateBudget(budgetUpdateForm);
 	}
 }
