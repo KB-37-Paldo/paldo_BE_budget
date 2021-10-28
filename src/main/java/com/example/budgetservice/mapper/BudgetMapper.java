@@ -10,6 +10,7 @@ import java.util.Optional;
 @Mapper
 public interface BudgetMapper {
 	long createBudget(BudgetCreateForm budgetCreateForm);
-	Optional<BudgetDto> findByUserId(long user);
+	Optional<BudgetDto> findByUserId(long userId);
     long updateBudget(BudgetUpdateForm budgetUpdateForm);
+	long deleteBudget(long userId);
 }

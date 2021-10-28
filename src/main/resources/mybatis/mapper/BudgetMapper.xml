@@ -15,7 +15,8 @@
 			cafeBgt AS cafe, trafficBgt AS traffic, financialBgt AS financial,
 			cultureBgt AS culture, medicalBgt AS medical, subscribeBgt AS subscribe,
 			lifeBgt AS life, congratulations
-		FROM BUDGET;
+		FROM BUDGET
+		WHERE user_id = #{userId};
 	</select>
 
 	<update id="updateBudget" parameterType="com.example.budgetservice.form.BudgetUpdateForm"
@@ -24,4 +25,9 @@
 		SET foodBgt=#{food}, shoppingBgt=#{shopping}, cafeBgt=#{cafe}, trafficBgt=#{traffic}, cultureBgt=#{culture}, medicalBgt=#{medical}, lifeBgt=#{life}, congratulations=#{congratulations}
 		WHERE user_id = #{userId};
 	</update>
+
+	<delete id="deleteBudget" parameterType="long">
+		DELETE FROM BUDGET
+		WHERE user_id = #{userId};
+	</delete>
 </mapper>

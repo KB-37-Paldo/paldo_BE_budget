@@ -23,6 +23,7 @@ public class BudgetServiceImpl implements BudgetService{
 
 	@Override
 	public long createBudget(BudgetCreateForm budgetCreateForm){
+		sqlsession.getMapper(BudgetMapper.class).deleteBudget(budgetCreateForm.getUserId());
 		return sqlsession.getMapper(BudgetMapper.class).createBudget(budgetCreateForm);
 	}
 
