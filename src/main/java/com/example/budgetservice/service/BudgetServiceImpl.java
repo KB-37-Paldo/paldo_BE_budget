@@ -12,6 +12,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -44,7 +46,7 @@ public class BudgetServiceImpl implements BudgetService{
 
 		List<Map<String, String>> lastMonthResult = sqlsession.getMapper(ExpenseMapper.class)
 				.findByUserIdGroupByCategory(userId, df.format(cal.getTime()));
-		System.out.println("lastMonthResult = " + lastMonthResult);
+
 		budgetResponse.setLastMonthOutlay(lastMonthResult);
 		budgetResponse.addOutlay(result);
 		budgetResponse.addAmount(budgetDto);
