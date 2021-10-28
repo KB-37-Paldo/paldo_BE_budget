@@ -1,7 +1,10 @@
 package com.example.budgetservice.service;
 
 import com.example.budgetservice.mapper.UserMapper;
+import com.example.budgetservice.model.RecommendDetailDto;
 import com.example.budgetservice.model.UserDto;
+import com.example.budgetservice.response.BudgetResponse;
+import com.example.budgetservice.response.RecommendResponse;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,7 +21,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.example.budgetservice.response.BudgetResponse;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -26,10 +28,12 @@ public class RecommendBudgetServiceImpl implements RecommendBudgetService{
 	
 	@Autowired
 	SqlSession sqlsession;
+	@Autowired
+	BudgetService budgetService;
 	
 	@Override
-	public BudgetResponse findByUserID(long userId) throws IOException, ParseException{
-		BudgetResponse budgetResponse =  new BudgetResponse();
+	public RecommendResponse findByUserID(long userId) throws IOException, ParseException{
+		BudgetResponse budgetResponse =  budgetService.findByUserID(userId, "2021-09");
 		UserDto user = sqlsession.getMapper(UserMapper.class).getUser(userId);
 		long salary = user.getSalary();
 		int age = user.getAge();
@@ -50,8 +54,95 @@ public class RecommendBudgetServiceImpl implements RecommendBudgetService{
 		
 		int intClusterId = Long.valueOf(clusterId).intValue();
 		List<Integer> clusteredUsage = Arrays.asList(2379353, 1239943, 1832680, 2270963);
-		int totAmount = clusteredUsage.get(intClusterId);
-		return budgetResponse;		
+		int totRecAmount = clusteredUsage.get(intClusterId);
+		
+		long exTotalAmount = budgetResponse.getTotalAmount();
+		int intEx = Long.valueOf(exTotalAmount).intValue();
+		int totalAmount = 100;
+		
+		if (intEx > totRecAmount) {
+			totalAmount = (intEx + totRecAmount) / 2;
+		} else {
+			totalAmount = intEx;
+		}	
+		
+		int food = budgetResponse.getFood().getAmount();
+		int shopping = budgetResponse.getShopping().getAmount();
+		int cafe = budgetResponse.getCafe().getAmount();
+		int traffic = budgetResponse.getTraffic().getAmount();
+		int financial = budgetResponse.getFinancial().getAmount();
+		int culture = budgetResponse.getCulture().getAmount();
+		int medical = budgetResponse.getMedical().getAmount();
+		int subscribe = budgetResponse.getSubscribe().getAmount();
+		int life = budgetResponse.getLife().getAmount();
+		int congratulations = budgetResponse.getCongratulations().getAmount();
+		
+		
+		
+		System.out.println(food);
+		RecommendResponse recommendResponse = new RecommendResponse();
+		
+		RecommendDetailDto refood = recommendResponse.getFood();
+		RecommendDetailDto reshopping = recommendResponse.getShopping();
+		RecommendDetailDto recafe = recommendResponse.getCafe();
+		RecommendDetailDto retraffic = recommendResponse.getTraffic();
+		RecommendDetailDto reculture = recommendResponse.getCulture();
+		RecommendDetailDto remedical = recommendResponse.getMedical();
+		RecommendDetailDto relife = recommendResponse.getLife();
+		RecommendDetailDto recongratulations = recommendResponse.getCongratulations();
+		
+		refood.setLastAmount(food);
+		reshopping.setLastAmount(shopping);
+		recafe.setLastAmount(cafe);
+		retraffic.setLastAmount(traffic);
+		reculture.setLastAmount(culture);
+		remedical.setLastAmount(medical);
+		relife.setLastAmount(life);
+		recongratulations.setLastAmount(congratulations);
+		
+		int totCharge = medical + life + congratulations;
+		int totExSum = intEx - totCharge;
+		int totSum = totalAmount - totCharge;
+		
+		long lfood = intToLong(food);
+		long ltotSum = intToLong(totSum);
+		long ltotExSum = intToLong(totExSum);
+		
+		long lshopping = intToLong(shopping);
+		long lcafe = intToLong(cafe);
+		long ltraffic = intToLong(traffic);
+		long lculture = intToLong(culture);
+		
+		int ifood = longToInt((lfood * ltotSum) / ltotExSum);
+		int ishopping = longToInt((lshopping * ltotSum) / ltotExSum);
+		int icafe = longToInt((lcafe * ltotSum) / ltotExSum);
+		int itraffic = longToInt((ltraffic * ltotSum) / ltotExSum);
+		int iculture = longToInt((lculture * ltotSum) / ltotExSum);
+				
+				
+		refood.setAmount(ifood);
+		reshopping.setAmount(ishopping);
+		recafe.setAmount(icafe);
+		retraffic.setAmount(itraffic);
+		reculture.setAmount(iculture);
+		remedical.setAmount(medical);
+		relife.setAmount(life);
+		recongratulations.setAmount(congratulations);
+		
+		long longTotalAmount = Long.valueOf(totalAmount);
+		recommendResponse.setUserId(userId);
+		recommendResponse.setLastTotalAmount(exTotalAmount);
+		recommendResponse.setTotalAmount(longTotalAmount);
+		recommendResponse.setFood(refood);
+		recommendResponse.setShopping(reshopping);
+		recommendResponse.setCafe(recafe);
+		recommendResponse.setTraffic(retraffic);
+		recommendResponse.setCulture(reculture);
+		recommendResponse.setMedical(remedical);
+		recommendResponse.setLife(relife);
+		recommendResponse.setCongratulations(recongratulations);
+		
+		return recommendResponse;		
 	}
 	
 	public String createConnection(String param) throws IOException {
@@ -123,4 +214,12 @@ public class RecommendBudgetServiceImpl implements RecommendBudgetService{
 		return null;
 	
 	}
+	
+	public int longToInt(long lvalue) {
+		return Long.valueOf(lvalue).intValue();
+	};
+	
+	public long intToLong(int ivalue) {
+		return Long.valueOf(ivalue);
+	};
 }
