@@ -89,7 +89,7 @@ $ git branch -d 개발완료한 브랜치 이름
 ![budget_erd](README.assets/budget_erd.png)
 
 
-## 5. 포트폴리오 서비스 API 명세
+## 5. 예산 서비스 API 명세
 
 1) 예산 API
    ![budget_controller](README.assets/budget_controller.png)
