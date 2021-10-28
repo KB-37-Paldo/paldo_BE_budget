@@ -74,8 +74,10 @@ public class ExpenseServiceImpl implements ExpenseService{
                 expenseWeekAmounts.add(addedExpense);
             }
 
-            ExpenseWeekAmountDto expenseWeekAmount = getExpenseWeekAmountByWeek(week, expenseWeekAmounts);
-            expenseWeekAmount.addTotalAmount(expense.getAmount());
+            if(expense.getAmount() < 0) {
+                ExpenseWeekAmountDto expenseWeekAmount = getExpenseWeekAmountByWeek(week, expenseWeekAmounts);
+                expenseWeekAmount.addTotalAmount(expense.getAmount());
+            }
         });
 
         Collections.sort(expenseWeekAmounts);
